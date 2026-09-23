@@ -16,3 +16,30 @@
     </el-table>
   </div>
 </template>
+<!--页面长啥样有什么交互-->
+
+<script>
+export default{
+  name:'App',
+  data(){
+    return{
+      todoText: '',
+      todoList: []
+    }
+  },
+  methods:{
+    addTodo(){
+      if(!this.todoText.trim()) return
+      this.todoList.push({
+        id: Date.now(),
+        content: this.todoText
+      })
+      this.todoText=''
+    },
+    delTodo(row){
+      this.todoList=this.todoList.filter(item=>item.id !== row.id)
+    }
+  }
+}
+</script>
+<!--页面的逻辑，数据-->
