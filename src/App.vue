@@ -19,7 +19,7 @@
 <!--页面长啥样有什么交互-->
 
 <script>
-export default{
+export default {
   name:'App',
   data(){
     return{
@@ -27,17 +27,25 @@ export default{
       todoList: []
     }
   },
+  mounted() {
+    this.getTodoList()
+  },
   methods:{
-    addTodo(){
-      if(!this.todoText.trim()) return
-      this.todoList.push({
-        id: Date.now(),
+    async getTodoList() {
+      const res=await this.$axios.get('http://localhost:3000/todos')
+      this.todoList=res.data
+    },
+    async addTodo(){
+      if(!this.todoText) return
+      await this.$axios.post('http://localhost:3000/todos', {
         content: this.todoText
       })
       this.todoText=''
+      this.getTodoList()
     },
-    delTodo(row){
-      this.todoList=this.todoList.filter(item=>item.id !== row.id)
+    async delTodo(row){
+      await this.$axios.delete(`http://localhost:3000/todos/${row.id}`)
+      this.getTodoList()
     }
   }
 }
